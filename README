@@ -1,0 +1,7 @@
+One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. So I’ve created a bash script to make it easier. 
+
+If you run it with the -r command it will refresh all the documents that have been previously downloaded. Very handy if you want all the PDF’s. You could even squirt them into calibre and have them on your kindle.
+
+./getAWSdocs.sh -r
+
+I hope some of you find this useful.
