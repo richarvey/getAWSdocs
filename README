@@ -1,26 +1,33 @@
-About.
-======
+# getAWSdocs
 
-One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. So I’ve created a bash script to make it easier. 
+### About
 
-If you run it with the -r command it will refresh all the documents that have been previously downloaded. Very handy if you want all the PDF’s. You could even squirt them into calibre and have them on your kindle.
+One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. After creating a simple bash script that kept breaking and needed updating, I decided to rewrite in python to make it a little easier to maintain.  
 
 I hope some of you find this useful.
 
-Usage.
-======
+### Requirements
 
-Get all documents:
+Make sure all these python modules are intalled:
 
-./getAWSdocs.sh
++ BeautifulSoup
++ urllib2
++ urlparse
 
-Refresh all documents:
+example:
 
-./getAWSdocs.sh -r
+```bash
+sudo pip install BeautifulSoup
+```
 
+### Usage
 
-Requirements.
-=============
+To get all documents:
 
-bash and a POSIX shell
-wget
+```bash
+./getAWSdocs.py
+```
+
+Thats it!
+
+[@ric_harvey](https://twitter.com/ric_harvey)
