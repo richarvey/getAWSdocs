@@ -21,7 +21,7 @@ def get_services():
 	    # ignore links to self
 	    if url.startswith("/documentation/"):
                 #print link.get('href')
-		if not url.endswith("/documentation/"):
+		if not (url.endswith("/documentation/") or url.startswith("/documentation/?nc") ):
 		    services.append(link.get('href'))
 		    directory = "." + link.get('href')
 		    if not os.path.exists(directory):
