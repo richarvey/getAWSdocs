@@ -5,6 +5,7 @@ import urllib2
 import urlparse
 import posixpath
 import os
+import sys
 
 # Build a list of the amazon service sections
 def get_services():
@@ -47,17 +48,22 @@ def get_pdfs(services):
 	    except: continue
 	    # Now download if the link is a PDF file
             if check == True:
-		# We need to work out the fiel name for saving
+		# We need to work out the file name for saving
                 path = urlparse.urlsplit(pdf).path
                 filename = "." + uri + posixpath.basename(path)
-                print "Downloading : " + pdf
-		# Open the URL and retrieve data
-                web = urllib2.urlopen(pdf)
-                print "Saving to : " + filename
-		# Save Data to disk
-                output = open(filename,'wb')
-                output.write(web.read())
-                output.close()
+		if not os.path.isfile(filename) or (len(sys.argv) > 1 and sys.argv[1] == "force"):
+			print "Downloading : " + pdf
+			# Open the URL and retrieve data
+			try:
+				web = urllib2.urlopen(pdf)
+				print "Saving to : " + filename
+				# Save Data to disk
+				output = open(filename,'wb')
+				output.write(web.read())
+				output.close()
+			except: continue
+		else:
+			print "Skipping file " + filename + " - file exists, use './getAWSdocs.py force' to force override"
 
 services_list = get_services()
 get_pdfs(services_list)
