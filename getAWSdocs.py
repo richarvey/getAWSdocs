@@ -25,7 +25,7 @@ def get_services():
 		    services.append(link.get('href'))
 		    directory = "." + link.get('href')
 		    if not os.path.exists(directory):
-		        os.makedirs(directory)		
+		        os.makedirs(directory)
         except: continue
     return services
 
@@ -43,7 +43,7 @@ def get_pdfs(services):
 	for link in soup_doc.findAll('a'):
             pdf = link.get('href')
 	    # Check link is a PDF file
-	    try: 
+	    try:
 		check = pdf.endswith("pdf")
 	    except: continue
 	    # Now download if the link is a PDF file
@@ -51,7 +51,11 @@ def get_pdfs(services):
 		# We need to work out the file name for saving
                 path = urlparse.urlsplit(pdf).path
                 filename = "." + uri + posixpath.basename(path)
-		if not os.path.isfile(filename) or (len(sys.argv) > 1 and sys.argv[1] == "force"):
+        # Nasty. AWS have uploaded ALL API versions as PDFs, not just the latest.
+        # They are all named as <service><docname><date>.pdf so we are
+        # just checking the last character before the dot and skipping download
+        # if it is a digit.
+		if (not (os.path.isfile(filename) or filename[len(filename) - 5 ].isdigit()) or (len(sys.argv) > 1 and sys.argv[1] == "--force")):
 			print "Downloading : " + pdf
 			# Open the URL and retrieve data
 			try:
@@ -63,7 +67,7 @@ def get_pdfs(services):
 				output.close()
 			except: continue
 		else:
-			print "Skipping file " + filename + " - file exists, use './getAWSdocs.py force' to force override"
+			print "Skipping file " + filename + " - file exists or file is a dated API PDF, use './getAWSdocs.py --force' to force download"
 
 services_list = get_services()
 get_pdfs(services_list)
