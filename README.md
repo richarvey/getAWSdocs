@@ -30,7 +30,7 @@ To get all documents:
 
 Files that exist on disk will not be re-downloaded (so by default only new sections/files are downloaded). To override this default and force re-download of files that exist on disk, use
 
-./getAWSdocs.py force
+./getAWSdocs.py --force
 
 Thats it!
 
