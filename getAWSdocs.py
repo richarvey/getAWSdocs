@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from BeautifulSoup import BeautifulSoup
-import urllib2
+import urllib
 import urlparse
 import posixpath
 import os
@@ -37,7 +37,7 @@ def get_pdfs(services):
 	url = base_url + uri
 	print "\nDownloading PDF's for : " + url + "\n"
 	# Parse the HTML page
-	html_page_doc = urllib2.urlopen(url)
+	html_page_doc = urllib.urlopen(url)
 	soup_doc = BeautifulSoup(html_page_doc)
 	# Get the A tag from the parsed page
 	for link in soup_doc.findAll('a'):
@@ -59,7 +59,7 @@ def get_pdfs(services):
 			print "Downloading : " + pdf
 			# Open the URL and retrieve data
 			try:
-				web = urllib2.urlopen(pdf)
+				web = urllib.urlopen(pdf)
 				print "Saving to : " + filename
 				# Save Data to disk
 				output = open(filename,'wb')
