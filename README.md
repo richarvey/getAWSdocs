@@ -11,13 +11,13 @@ I hope some of you find this useful.
 Make sure all these python modules are intalled:
 
 + BeautifulSoup
-+ urllib2
-+ urlparse
++ urllib3+
++ urlparse3
 
 example:
 
-```bash
-sudo pip install BeautifulSoup
+```bash 
+sudo pip install -r requirements.txt
 ```
 
 ### Usage
@@ -30,7 +30,9 @@ To get all documents:
 
 Files that exist on disk will not be re-downloaded (so by default only new sections/files are downloaded). To override this default and force re-download of files that exist on disk, use
 
+```bash
 ./getAWSdocs.py --force
+```
 
 Thats it!
 

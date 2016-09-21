@@ -1,1 +1,3 @@
-BeautifulSoup==3.2.1
+BeautifulSoup
+urllib3
+urlparse3

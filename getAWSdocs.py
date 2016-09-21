@@ -9,7 +9,7 @@ import sys
 
 # Build a list of the amazon service sections
 def get_services():
-    html_page = urllib2.urlopen("http://aws.amazon.com/documentation/")
+    html_page = urllib.urlopen("http://aws.amazon.com/documentation/")
     # Parse the HTML page
     soup = BeautifulSoup(html_page)
     urls = []
