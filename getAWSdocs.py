@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import urllib
 import urlparse
 import posixpath
@@ -11,7 +11,7 @@ import sys
 def get_services():
     html_page = urllib.urlopen("http://aws.amazon.com/documentation/")
     # Parse the HTML page
-    soup = BeautifulSoup(html_page)
+    soup = BeautifulSoup(html_page, 'html.parser')
     urls = []
     services = []
     # Get the A tag from the parsed page
@@ -38,7 +38,7 @@ def get_pdfs(services):
 	print "\nDownloading PDF's for : " + url + "\n"
 	# Parse the HTML page
 	html_page_doc = urllib.urlopen(url)
-	soup_doc = BeautifulSoup(html_page_doc)
+	soup_doc = BeautifulSoup(html_page_doc, 'html.parser')
 	# Get the A tag from the parsed page
 	for link in soup_doc.findAll('a'):
             pdf = link.get('href')
