@@ -11,7 +11,7 @@ def get_options():
   args = vars(parser.parse_args())
   return (args)
 
-# Build a list of the amazon service sections
+# Build a list of the amazon PDF's
 def list_pdfs(start_page):
   html_page = urllib.urlopen(start_page)
   # Parse the HTML page
@@ -30,11 +30,9 @@ def list_pdfs(start_page):
       if "documentation" in start_page:
         if uri.startswith("/documentation/"):
           if not (uri.endswith("/documentation/") or uri.endswith("/kindle/") or uri.startswith("/documentation/?nc") ):
-            #print uri
             base_url = "http://aws.amazon.com"
             url = base_url + uri
-            #print url
-	    # Parse the HTML sub page
+	    # Parse the HTML sub page (this is where the links to the pdf's live)
     	    html_page_doc = urllib.urlopen(url)
 	    soup_doc = BeautifulSoup(html_page_doc, 'html.parser')
 	    # Get the A tag from the parsed page
@@ -42,7 +40,6 @@ def list_pdfs(start_page):
               try:
                 sub_url = link.get('href')
                 if sub_url.endswith("pdf"):
-                  #print sub_url
                   pdfs.add(sub_url)
               except:
                 continue
@@ -73,11 +70,12 @@ def get_pdfs(pdf_list, force):
   for i in pdf_list:
    doc = i.split('/')
    doc_location = doc[3]
+   filename = urlparse.urlsplit(i).path.split('/')[-1]
+   # Set download dir for whitepapers
    if "whitepapers" in doc_location:
-     filename = urlparse.urlsplit(i).path.split('/')[-1]
      full_dir = "whitepapers/"
    else:
-     filename = urlparse.urlsplit(i).path.split('/')[-1]
+     # Set download dir and sub directories for documentation
      full_dir = "documentation/"
      directory = urlparse.urlsplit(i).path.split('/')[:-1]
      for path in directory:
@@ -90,6 +88,7 @@ def get_pdfs(pdf_list, force):
 
 # Main
 args = get_options()
+# allow user to overwrite files
 force = args['force']
 if args['documentation']:
   print "Downloading Docs"
