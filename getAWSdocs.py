@@ -24,7 +24,7 @@ def list_pdfs(start_page):
       # Allow whitepapers to be returned
       if "whitepapers" in start_page:
         if uri.endswith("pdf"):
-          if "whitepapers" in uri:
+          if "whitepapers" in uri or "enterprise-marketing" in uri:
             pdfs.add(uri)
       # Allow all documents to be returned
       if "documentation" in start_page:
@@ -97,4 +97,7 @@ if args['documentation']:
 if args['whitepapers']:
   print "Downloading Whitepapaers"
   pdf_list = list_pdfs("http://aws.amazon.com/whitepapers/")
+  get_pdfs(pdf_list, force)
+  print "Downloading SAP Whitepapaers"
+  pdf_list = list_pdfs("https://aws.amazon.com/sap/whitepapers/")
   get_pdfs(pdf_list, force)
