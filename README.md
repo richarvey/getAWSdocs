@@ -6,6 +6,8 @@ One thing that strikes me as odd with Amazon and the documentation on AWS is tha
 
 I hope some of you find this useful.
 
+(update working on a python 3 version)
+
 ## Requirements
 
 Make sure all these python modules are installed:
