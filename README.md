@@ -8,12 +8,13 @@ I hope some of you find this useful.
 
 ## Requirements
 
-Make sure all these python modules are intalled:
+Make sure all these python modules are installed:
 
  - argparse
  - beautifulsoup4
  - urllib3+
  - urlparse3
+ - lxml
 
 example:
 
