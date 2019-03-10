@@ -1,7 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
-import urllib, urlparse, os, argparse
+import os, argparse
+from urllib.parse import urlparse, urlsplit
+from urllib.request import urlopen
 import json
 
 def get_options():
@@ -14,15 +16,15 @@ def get_options():
 
 # Build a list of the amazon PDF's
 def list_whitepaper_pdfs(start_page):
-  html_page = urllib.urlopen(start_page)
+  html_page = urlopen(start_page)
   # Parse the HTML page
   soup = BeautifulSoup(html_page, 'html.parser')
   pdfs =  set()
-  print "Generating PDF list (this may take some time)"
+  print("Generating PDF list (this may take some time)")
   for link in soup.findAll('a'):
     try:
       uri = link.get('href')
-      print 'URI: ', uri
+      print('URI: ', uri)
       # Allow whitepapers to be returned
       if "whitepapers" in start_page:
         if uri.endswith("pdf"):
@@ -34,7 +36,7 @@ def list_whitepaper_pdfs(start_page):
 
 
 def find_pdfs_in_html(url):
-  html_page_doc = urllib.urlopen(url)
+  html_page_doc = urlopen(url)
   soup_doc = BeautifulSoup(html_page_doc, 'html.parser')
   # Get the A tag from the parsed page
   pdfs = set()
@@ -52,15 +54,15 @@ def list_docs_pdfs(start_page):
   locale_path = "en_us/"
   base_url = "http://docs.aws.amazon.com"
 
-  page = urllib.urlopen(start_page)
+  page = urlopen(start_page)
   soup = BeautifulSoup(page, "xml")
   pdfs =  set()
-  print "Generating PDF list (this may take some time)"
+  print("Generating PDF list (this may take some time)")
 
   for link in soup.findAll('service'):
     try:
       uri = link.get('href')
-      print 'URI: ', uri
+      print('URI: ', uri)
       # if service uri is .html then parse as HTML
       if '.html' in uri:
         url = base_url + uri
@@ -72,18 +74,18 @@ def list_docs_pdfs(start_page):
         url = base_url + uri.split("?")[0] + locale_path + "landing-page.xml"
       
       # Fetch the XML sub page (this is where the links to the pdf's live)
-      sub_page_doc = urllib.urlopen(url)
+      sub_page_doc = urlopen(url)
       soup_doc = BeautifulSoup(sub_page_doc, 'xml')
       
       # Get the "tile" tag from the parsed page
       for sublink in soup_doc.findAll('tile'):
         try:
           sub_url = sublink.get('href')
-          directory = base_url + "/".join(urlparse.urlsplit(sub_url).path.split('/')[:-1])
+          directory = base_url + "/".join(urlsplit(sub_url).path.split('/')[:-1])
 
           guide_info_url = directory + "/meta-inf/guide-info.json"
-          print "Guide info url:", guide_info_url
-          guide_info_doc = urllib.urlopen(guide_info_url).read()
+          print("Guide info url:", guide_info_url)
+          guide_info_doc = urlopen(guide_info_url).read()
           guide_info = json.loads(guide_info_doc)
 
           if "pdf" in guide_info:
@@ -104,29 +106,29 @@ def save_pdf(full_dir,filename,i):
   if not os.path.exists(file_loc) or force == True:
     if i.startswith("//"):
       i = "http:" + i
-    print "Downloading : " + i  
-    web = urllib.urlopen(i)
-    print "Saving to : " + file_loc
+    print("Downloading : " + i)
+    web = urlopen(i)
+    print("Saving to : " + file_loc)
     # Save Data to disk
     output = open(file_loc,'wb')
     output.write(web.read())
     output.close()
   else:
-    print "Skipping " + i + " - file exists or is a dated API document, use './getAWSdocs.py --force' to force override"
+    print("Skipping " + i + " - file exists or is a dated API document, use './getAWSdocs.py --force' to force override")
 
 
 def get_pdfs(pdf_list, force):
   for i in pdf_list:
     doc = i.split('/')
     doc_location = doc[3]
-    filename = urlparse.urlsplit(i).path.split('/')[-1]
+    filename = urlsplit(i).path.split('/')[-1]
     # Set download dir for whitepapers
     if "whitepapers" in doc_location:
       full_dir = "whitepapers/"
     else:
       # Set download dir and sub directories for documentation
       full_dir = "documentation/"
-      directory = urlparse.urlsplit(i).path.split('/')[:-1]
+      directory = urlsplit(i).path.split('/')[:-1]
       for path in directory:
         if path != "":
           full_dir = full_dir + path + "/"
@@ -140,17 +142,17 @@ args = get_options()
 # allow user to overwrite files
 force = args['force']
 if args['documentation']:
-  print "Downloading Docs"
+  print("Downloading Docs")
   pdf_list = list_docs_pdfs("https://docs.aws.amazon.com/en_us/main-landing-page.xml")
   get_pdfs(pdf_list, force)
 
 if args['whitepapers']:
-  print "Downloading Whitepapaers"
+  print("Downloading Whitepapaers")
   pdf_list = list_whitepaper_pdfs("http://aws.amazon.com/whitepapers/")
   get_pdfs(pdf_list, force)
-  print "Downloading SAP Whitepapaers"
+  print("Downloading SAP Whitepapaers")
   pdf_list = list_whitepaper_pdfs("https://aws.amazon.com/sap/whitepapers/")
   get_pdfs(pdf_list, force)
 
 for p in pdf_list:
-  print p
+  print(p)
