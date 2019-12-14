@@ -48,4 +48,4 @@ __Note:__ You can use a combination of -d and -w to download all documents at on
 
 Thats it!
 
-Built by Ric: [@ric_harvey](https://twitter.com/ric_harvey)
+Built by Ric: [@ric__harvey](https://twitter.com/ric__harvey)
